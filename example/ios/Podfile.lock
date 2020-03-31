@@ -1,0 +1,22 @@
+PODS:
+  - facebook (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - facebook (from `.symlinks/plugins/facebook/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  facebook:
+    :path: ".symlinks/plugins/facebook/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  facebook: 311bbf637ee66f04efe6720b65813e1293d15163
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+
+COCOAPODS: 1.9.1
