@@ -8,9 +8,8 @@ part of 'login.dart';
 
 FacebookLoginRequest _$FacebookLoginRequestFromJson(Map<String, dynamic> json) {
   return FacebookLoginRequest(
-    permissions: (json['permissions'] as List)
-        ?.map((dynamic e) => e as String)
-        ?.toList(),
+    permissions:
+        (json['permissions'] as List)?.map((e) => e as String)?.toList(),
   );
 }
 
@@ -22,12 +21,13 @@ Map<String, dynamic> _$FacebookLoginRequestToJson(
 
 FacebookLoginResult _$FacebookLoginResultFromJson(Map<String, dynamic> json) {
   return FacebookLoginResult(
-    type: json['type'] as String,
+    status:
+        const FacebookLoginStatusConverter().fromJson(json['status'] as String),
   );
 }
 
 Map<String, dynamic> _$FacebookLoginResultToJson(
         FacebookLoginResult instance) =>
     <String, dynamic>{
-      'type': instance.type,
+      'status': const FacebookLoginStatusConverter().toJson(instance.status),
     };

@@ -86,7 +86,7 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
             switch loginResult {
             case .cancelled:
                 result([
-                    "type": "cancelled",
+                    "status": ".cancelled",
                 ])
             case .success(granted: _, declined: _, token: _):
                 print("Login succeeded: \(loginResult)")
