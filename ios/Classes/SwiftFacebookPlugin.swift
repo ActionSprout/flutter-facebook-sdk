@@ -3,6 +3,7 @@ import FacebookLogin
 import Flutter
 import UIKit
 
+// This should be specified by FacebookCore, but is not exposed to Swift.
 let kFBSDKErrorDeveloperMessageKey = "com.facebook.sdk:FBSDKErrorDeveloperMessageKey"
 
 func format(error: Error) -> FlutterError {
@@ -84,7 +85,9 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
         ) { loginResult in
             switch loginResult {
             case .cancelled:
-                print("Login cancelled: \(loginResult)")
+                result([
+                    "type": "cancelled",
+                ])
             case .success(granted: _, declined: _, token: _):
                 print("Login succeeded: \(loginResult)")
             case let .failed(error):

@@ -20,7 +20,8 @@ class _MyAppState extends State<MyApp> {
           child: RaisedButton(
             onPressed: () async {
               try {
-                await Facebook.logIn();
+                final result = await Facebook.logIn();
+                print('Login completed with: ${result.toJson()}');
               } on Object catch (error) {
                 print('Login failed with: $error');
               }
