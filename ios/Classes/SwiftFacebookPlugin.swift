@@ -21,6 +21,44 @@ func format(error: Error) -> FlutterError {
     )
 }
 
+extension Set where Element == Permission {
+    func toJSON() -> [String] {
+        return map { $0.name }
+    }
+}
+
+extension Date {
+    func toJSON() -> UInt64 {
+        return UInt64(timeIntervalSince1970 * 1000)
+    }
+}
+
+extension LoginResult {
+    func toJSON() -> [String: Any?] {
+        switch self {
+        case .cancelled:
+            return [
+                "status": ".cancelled",
+            ]
+        case let .success(granted, declined, token):
+            return [
+                "status": ".success",
+                "app_id": token.appID,
+                "declined": declined.toJSON(),
+                "expires_at": token.expirationDate.toJSON(),
+                "granted": granted.toJSON(),
+                "token": token.tokenString,
+                "user_id": token.userID,
+            ]
+        case let .failed(error):
+            return [
+                "status": ".failed",
+                "error": format(error: error),
+            ]
+        }
+    }
+}
+
 public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "actionsprout.com/facebook", binaryMessenger: registrar.messenger())
@@ -83,16 +121,7 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
         facebookLoginManager.logIn(
             permissions: permissions
         ) { loginResult in
-            switch loginResult {
-            case .cancelled:
-                result([
-                    "status": ".cancelled",
-                ])
-            case .success(granted: _, declined: _, token: _):
-                print("Login succeeded: \(loginResult)")
-            case let .failed(error):
-                result(format(error: error))
-            }
+            result(loginResult.toJSON())
         }
     }
 }

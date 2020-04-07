@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 
 import 'login.dart';
 
+export 'login.dart';
+
 class Facebook {
   static const MethodChannel _channel =
       MethodChannel('actionsprout.com/facebook');
@@ -11,9 +13,11 @@ class Facebook {
   static Future<FacebookLoginResult> logIn() {
     return _channel
         .invokeMethod<Map>('login', const FacebookLoginRequest().toJson())
-        .then((result) => FacebookLoginResult.fromJson(
-              result.cast<String, dynamic>(),
-            ));
+        .then((result) {
+      return FacebookLoginResult.fromJson(
+        result.cast<String, dynamic>(),
+      );
+    });
   }
 }
 

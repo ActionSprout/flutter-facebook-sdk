@@ -9,6 +9,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  FacebookLoginResult _loginResult;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,18 +18,21 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Facebook example'),
         ),
-        body: Center(
-          child: RaisedButton(
-            onPressed: () async {
-              try {
+        body: Column(
+          children: [
+            if (_loginResult != null) ...[
+              Text('Result: ${_loginResult.status}'),
+            ],
+            RaisedButton(
+              onPressed: () async {
                 final result = await Facebook.logIn();
-                print('Login completed with: ${result.toJson()}');
-              } on Object catch (error) {
-                print('Login failed with: $error');
-              }
-            },
-            child: const Text('Login with Facebook'),
-          ),
+                setState(() {
+                  _loginResult = result;
+                });
+              },
+              child: const Text('Login with Facebook'),
+            ),
+          ],
         ),
       ),
     );

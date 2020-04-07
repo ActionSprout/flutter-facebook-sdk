@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 part 'login.g.dart';
 
 enum FacebookLoginStatus {
-  unknown,
   success,
   cancelled,
   failed,
@@ -27,15 +26,43 @@ class FacebookLoginRequest {
 
 @JsonSerializable()
 class FacebookLoginResult {
-  const FacebookLoginResult({this.status});
+  const FacebookLoginResult({
+    this.appId,
+    this.declinedPermissions,
+    this.expiresAt,
+    this.grantedPermissions,
+    this.status,
+    this.token,
+    this.userId,
+  });
 
-  factory FacebookLoginResult.fromJson(Map<String, dynamic> json) =>
-      _$FacebookLoginResultFromJson(json);
+  factory FacebookLoginResult.fromJson(Map<String, dynamic> json) {
+    return _$FacebookLoginResultFromJson(json);
+  }
   Map<String, dynamic> toJson() => _$FacebookLoginResultToJson(this);
+
+  @JsonKey(name: 'app_id')
+  final String appId;
+
+  @JsonKey(name: 'declined')
+  final List<String> declinedPermissions;
+
+  @JsonKey(name: 'expires_at')
+  @MillisecondsSinceEpochConverter()
+  final DateTime expiresAt;
+
+  @JsonKey(name: 'granted')
+  final List<String> grantedPermissions;
 
   @JsonKey()
   @FacebookLoginStatusConverter()
   final FacebookLoginStatus status;
+
+  @JsonKey()
+  final String token;
+
+  @JsonKey(name: 'user_id')
+  final String userId;
 }
 
 class FacebookLoginStatusConverter
@@ -46,15 +73,12 @@ class FacebookLoginStatusConverter
     FacebookLoginStatus.success: '.success',
     FacebookLoginStatus.cancelled: '.cancelled',
     FacebookLoginStatus.failed: '.failed',
-    FacebookLoginStatus.unknown: '.unknown',
   };
 
   @override
   FacebookLoginStatus fromJson(String json) {
-    print(json);
-
     if (!_statusToString.containsValue(json)) {
-      return FacebookLoginStatus.unknown;
+      return null;
     }
 
     return _statusToString.keys
@@ -65,4 +89,14 @@ class FacebookLoginStatusConverter
   String toJson(FacebookLoginStatus status) {
     return _statusToString[status];
   }
+}
+
+class MillisecondsSinceEpochConverter implements JsonConverter<DateTime, int> {
+  const MillisecondsSinceEpochConverter();
+
+  @override
+  DateTime fromJson(int ms) => DateTime.fromMillisecondsSinceEpoch(ms);
+
+  @override
+  int toJson(DateTime dateTime) => dateTime.millisecondsSinceEpoch;
 }
