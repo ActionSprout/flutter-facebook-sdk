@@ -7,22 +7,27 @@ import 'login.dart';
 export 'login.dart';
 
 class Facebook {
+  const Facebook._();
+
   static const MethodChannel _channel =
       MethodChannel('actionsprout.com/facebook');
 
-  static Future<FacebookLoginResult> logIn() {
+  static const Facebook instance = Facebook._();
+
+  Future<FacebookLoginResult> logIn({List<String> permissions}) {
     return _channel
-        .invokeMethod<Map>('log_in', const FacebookLoginRequest().toJson())
+        .invokeMethod<Map>(
+            'log_in', FacebookLoginRequest(permissions: permissions).toJson())
         .then((result) => FacebookLoginResult.fromJson(
               result.cast<String, dynamic>(),
             ));
   }
 
-  static Future<void> logOut() {
+  Future<void> logOut() {
     return _channel.invokeMethod<Map>('log_out', {});
   }
 
-  static Future<FacebookAccessToken> getCurrentAccessToken() {
+  Future<FacebookAccessToken> getCurrentAccessToken() {
     return _channel.invokeMethod<Map>('get_access_token', {}).then((result) =>
         result == null
             ? null

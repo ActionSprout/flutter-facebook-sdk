@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _loginWithFacebook(BuildContext context) async {
-    final loginResult = await Facebook.logIn();
+    final loginResult = await Facebook.instance.logIn();
 
     return showDialog(
       context: context,
@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _logout(BuildContext context) async {
-    await Facebook.logOut();
+    await Facebook.instance.logOut();
 
     return showDialog(
       context: context,
@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _viewCurrentToken(BuildContext context) async {
-    final token = await Facebook.getCurrentAccessToken();
+    final token = await Facebook.instance.getCurrentAccessToken();
 
     return showDialog(
       context: context,
