@@ -68,6 +68,8 @@ class FacebookAccessToken {
 
   Map<String, dynamic> toJson() => _$FacebookAccessTokenToJson(this);
 
+  bool get isValid => DateTime.now().isBefore(expiresAt);
+
   @JsonKey(name: 'app_id')
   final String appId;
 
