@@ -12,16 +12,18 @@ class Facebook {
 
   static Future<FacebookLoginResult> logIn() {
     return _channel
-        .invokeMethod<Map>('login', const FacebookLoginRequest().toJson())
-        .then((result) {
-      return FacebookLoginResult.fromJson(
-        result.cast<String, dynamic>(),
-      );
-    });
+        .invokeMethod<Map>('log_in', const FacebookLoginRequest().toJson())
+        .then((result) => FacebookLoginResult.fromJson(
+              result.cast<String, dynamic>(),
+            ));
+  }
+
+  static Future<void> logOut() {
+    return _channel.invokeMethod<Map>('log_out', {});
+  }
+
+  static Future<FacebookAccessToken> getCurrentAccessToken() {
+    return _channel.invokeMethod<Map>('get_access_token', {}).then((result) =>
+        FacebookAccessToken.fromJson(result.cast<String, dynamic>()));
   }
 }
-
-// FBSDKLog: fbauth2 is missing from your Info.plist under
-// LSApplicationQueriesSchemes and is required for iOS 9.0
-// =>
-// PlatformException(3, Unknown error building URL., null)

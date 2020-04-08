@@ -21,6 +21,19 @@ func format(error: Error) -> FlutterError {
     )
 }
 
+extension AccessToken {
+    func toJSON() -> [String: Any?] {
+        return [
+            "app_id": appID,
+            "declined": declinedPermissions.toJSON(),
+            "expires_at": expirationDate.toJSON(),
+            "granted": permissions.toJSON(),
+            "token": tokenString,
+            "user_id": userID,
+        ]
+    }
+}
+
 extension Set where Element == Permission {
     func toJSON() -> [String] {
         return map { $0.name }
@@ -43,12 +56,9 @@ extension LoginResult {
         case let .success(granted, declined, token):
             return [
                 "status": ".success",
-                "app_id": token.appID,
                 "declined": declined.toJSON(),
-                "expires_at": token.expirationDate.toJSON(),
                 "granted": granted.toJSON(),
-                "token": token.tokenString,
-                "user_id": token.userID,
+                "token": token.toJSON(),
             ]
         case let .failed(error):
             return [
@@ -84,8 +94,12 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
         }
 
         switch call.method {
-        case "login":
+        case "log_in":
             loginWithFacebook(arguments, result)
+        case "log_out":
+            logoutWithFacebook(arguments, result)
+        case "get_access_token":
+            getCurrentAccessToken(arguments, result)
         default:
             result(FlutterError(
                 code: "UNIMPLEMENTED",
@@ -122,6 +136,19 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
             permissions: permissions
         ) { loginResult in
             result(loginResult.toJSON())
+        }
+    }
+
+    private func logoutWithFacebook(_: [String: Any?], _ result: @escaping FlutterResult) {
+        facebookLoginManager.logOut()
+        result(nil)
+    }
+
+    private func getCurrentAccessToken(_: [String: Any?], _ result: @escaping FlutterResult) {
+        if let token = AccessToken.current {
+            result(token.toJSON())
+        } else {
+            result(nil)
         }
     }
 }

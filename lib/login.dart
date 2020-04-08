@@ -27,19 +27,46 @@ class FacebookLoginRequest {
 @JsonSerializable()
 class FacebookLoginResult {
   const FacebookLoginResult({
+    this.accessToken,
+    this.declinedPermissions,
+    this.grantedPermissions,
+    this.status,
+  });
+
+  factory FacebookLoginResult.fromJson(Map<String, dynamic> json) =>
+      _$FacebookLoginResultFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FacebookLoginResultToJson(this);
+
+  @JsonKey(name: 'token')
+  final FacebookAccessToken accessToken;
+
+  @JsonKey(name: 'declined')
+  final List<String> declinedPermissions;
+
+  @JsonKey(name: 'granted')
+  final List<String> grantedPermissions;
+
+  @JsonKey()
+  @FacebookLoginStatusConverter()
+  final FacebookLoginStatus status;
+}
+
+@JsonSerializable()
+class FacebookAccessToken {
+  const FacebookAccessToken({
     this.appId,
     this.declinedPermissions,
     this.expiresAt,
     this.grantedPermissions,
-    this.status,
     this.token,
     this.userId,
   });
 
-  factory FacebookLoginResult.fromJson(Map<String, dynamic> json) {
-    return _$FacebookLoginResultFromJson(json);
-  }
-  Map<String, dynamic> toJson() => _$FacebookLoginResultToJson(this);
+  factory FacebookAccessToken.fromJson(Map<String, dynamic> json) =>
+      _$FacebookAccessTokenFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FacebookAccessTokenToJson(this);
 
   @JsonKey(name: 'app_id')
   final String appId;
@@ -53,10 +80,6 @@ class FacebookLoginResult {
 
   @JsonKey(name: 'granted')
   final List<String> grantedPermissions;
-
-  @JsonKey()
-  @FacebookLoginStatusConverter()
-  final FacebookLoginStatus status;
 
   @JsonKey()
   final String token;
