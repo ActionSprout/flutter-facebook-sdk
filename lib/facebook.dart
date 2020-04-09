@@ -28,8 +28,8 @@ class Facebook {
   }
 
   Future<FacebookAccessToken> getCurrentAccessToken() {
-    return _channel.invokeMethod<Map>('get_access_token', {}).then((result) =>
-        result == null
+    return _channel.invokeMethod<Map>('get_current_access_token', {}).then(
+        (result) => result == null
             ? null
             : FacebookAccessToken.fromJson(result.cast<String, dynamic>()));
   }

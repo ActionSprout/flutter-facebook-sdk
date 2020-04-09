@@ -98,7 +98,7 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
             loginWithFacebook(arguments, result)
         case "log_out":
             logoutWithFacebook(arguments, result)
-        case "get_access_token":
+        case "get_current_access_token":
             getCurrentAccessToken(arguments, result)
         default:
             result(FlutterError(
