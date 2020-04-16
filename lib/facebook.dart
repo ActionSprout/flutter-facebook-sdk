@@ -17,10 +17,14 @@ class Facebook {
   Future<FacebookLoginResult> logIn({List<String> permissions}) {
     return _channel
         .invokeMethod<Map>(
-            'log_in', FacebookLoginRequest(permissions: permissions).toJson())
-        .then((result) => FacebookLoginResult.fromJson(
-              result.cast<String, dynamic>(),
-            ));
+          'log_in',
+          FacebookLoginRequest(permissions: permissions ?? []).toJson(),
+        )
+        .then(
+          (result) => FacebookLoginResult.fromJson(
+            result.cast<String, dynamic>(),
+          ),
+        );
   }
 
   Future<void> logOut() {
