@@ -57,7 +57,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _loginWithFacebook(BuildContext context) async {
-    final loginResult = await Facebook.instance.logIn();
+    final loginResult =
+        await Facebook.instance.logIn(permissions: ['public_profile']);
 
     return showDialog(
       context: context,
