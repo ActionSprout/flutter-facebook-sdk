@@ -37,4 +37,19 @@ class Facebook {
             ? null
             : FacebookAccessToken.fromJson(result.cast<String, dynamic>()));
   }
+
+  Future<void> logAppEvent(
+    String name, {
+    Map<String, dynamic> parameters,
+  }) {
+    final args = <String, dynamic>{
+      'name': name,
+    };
+
+    if (parameters != null) {
+      args['parameters'] = parameters;
+    }
+
+    return _channel.invokeMethod('log_app_event', args);
+  }
 }

@@ -1,14 +1,35 @@
 # facebook
 
-Flutter integration to first-party Facebook SDKs.
+Flutter integration for the Android and iOS Facebook SDKs.
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+To install, add the following to the `dependencies` section of your `pubspec.yaml` file:
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```
+facebook: ^0.0.1
+```
+
+Then, ensure Flutter has installed it with `flutter pub get`.
+
+## Setup
+
+The first API you'll need to connect is the FacebookLogin SDK:
+
+### Android
+
+Follow the steps in the Facebook SDK guidelines for Android, starting after those for downloading and installing the SDK itself, which is taken care up by `flutter pub get`, above, and ending before making a change to the UI itself (e.g. "Add the Facebook Login Button").
+
+https://developers.facebook.com/docs/facebook-login/android
+
+### iOS
+
+
+
+### Dart
+
+## More information
+
+For more information, see the API documentation.
+
+## Alternatives

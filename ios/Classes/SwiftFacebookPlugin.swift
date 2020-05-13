@@ -100,6 +100,8 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
             logoutWithFacebook(arguments, result)
         case "get_current_access_token":
             getCurrentAccessToken(arguments, result)
+        case "log_app_event":
+            logAppEvent(arguments, result)
         default:
             result(FlutterError(
                 code: "UNIMPLEMENTED",
@@ -150,5 +152,24 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
         } else {
             result(nil)
         }
+    }
+
+    private func logAppEvent(_ args: [String: Any?], _ result: @escaping FlutterResult) {
+        guard let name = args["name"] as? String else {
+            result(FlutterError(
+                code: "INVALID_ARG",
+                message: "Method 'fire_app_event' requires name parameter as a String.",
+                details: nil
+            ))
+            return
+        }
+
+        var params: [String: Any?] = [:]
+        if let parameters = args["parameters"] as? [String: Any?] {
+            params = parameters
+        }
+
+        AppEvents.logEvent(AppEvents.Name(name), parameters: params)
+        result(nil)
     }
 }
