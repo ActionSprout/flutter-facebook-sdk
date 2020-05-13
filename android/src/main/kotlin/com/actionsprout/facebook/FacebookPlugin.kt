@@ -2,6 +2,7 @@ package com.actionsprout.facebook
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 
 import androidx.annotation.NonNull
@@ -10,6 +11,7 @@ import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginBehavior
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -45,11 +47,24 @@ fun AccessToken.toJSON(): Map<String, Any> {
             )
 }
 
+fun HashMap<String, Any>.toBundle(): Bundle {
+    val result = Bundle()
+
+    for ((key, value) in this) {
+        when {
+            value is String -> result.putString(key, value)
+        }
+    }
+
+    return result
+}
+
 /** FacebookPlugin */
 public class FacebookPlugin : ActivityAware, ActivityResultListener, FlutterPlugin, MethodCallHandler {
     // private val loginManager: LoginManager = LoginManager.getInstance()
     private val callbackManager: CallbackManager = CallbackManager.Factory.create()
     private var activity: Activity? = null
+    private var appEventsLogger: AppEventsLogger? = null
 
     companion object {
         @JvmStatic
@@ -57,6 +72,7 @@ public class FacebookPlugin : ActivityAware, ActivityResultListener, FlutterPlug
             val channel = MethodChannel(registrar.messenger(), "actionsprout.com/facebook")
             var instance = FacebookPlugin()
             instance.activity = registrar.activity()
+            instance.appEventsLogger = AppEventsLogger.newLogger(instance.activity)
             channel.setMethodCallHandler(instance)
             registrar.addActivityResultListener(instance)
         }
@@ -82,6 +98,7 @@ public class FacebookPlugin : ActivityAware, ActivityResultListener, FlutterPlug
             call.method == "log_in" -> loginWithFacebook(args, result)
             call.method == "log_out" -> logoutWithFacebook(args, result)
             call.method == "get_current_access_token" -> getCurrentAccessToken(args, result)
+            call.method == "log_app_event" -> logAppEvent(args, result)
             else -> result.notImplemented()
         }
     }
@@ -92,20 +109,24 @@ public class FacebookPlugin : ActivityAware, ActivityResultListener, FlutterPlug
 
     override fun onAttachedToActivity(@NonNull binding: ActivityPluginBinding) {
         activity = binding.getActivity()
+        appEventsLogger = AppEventsLogger.newLogger(activity)
         binding.addActivityResultListener(this)
     }
 
     override fun onReattachedToActivityForConfigChanges(@NonNull binding: ActivityPluginBinding) {
         activity = binding.getActivity()
+        appEventsLogger = AppEventsLogger.newLogger(activity)
         binding.addActivityResultListener(this)
     }
 
     override fun onDetachedFromActivity() {
         activity = null
+        appEventsLogger = null
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
         activity = null
+        appEventsLogger = null
     }
 
     fun loginWithFacebook(@NonNull args: HashMap<String, Any>, @NonNull result: Result) {
@@ -154,5 +175,32 @@ public class FacebookPlugin : ActivityAware, ActivityResultListener, FlutterPlug
 
     fun getCurrentAccessToken(@NonNull args: HashMap<String, Any>, @NonNull result: Result) {
         result.success(AccessToken.getCurrentAccessToken()?.toJSON())
+    }
+
+    fun logAppEvent(@NonNull args: HashMap<String, Any>, @NonNull result: Result) {
+        if (appEventsLogger !is AppEventsLogger) {
+            result.error("INVALID_STATE", "No current Activity.", null)
+            return
+        }
+
+        if (args["name"] !is String) {
+            result.error(
+                    "INVALID_ARG",
+                    "Method 'fire_app_event' requires name parameter as a String.",
+                    null
+            )
+            return
+        }
+
+        val name = args["name"] as String
+        val logger = appEventsLogger as AppEventsLogger
+
+        if (args["parameters"] is HashMap<*, *>) {
+            logger.logEvent(name, (args["parameters"] as HashMap<String, Any>).toBundle())
+        } else {
+            logger.logEvent(name)
+        }
+
+        result.success(null)
     }
 }
