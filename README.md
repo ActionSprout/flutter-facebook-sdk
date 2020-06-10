@@ -7,7 +7,7 @@ Flutter integration for the Android and iOS Facebook SDKs.
 To install, add the following to the `dependencies` section of your `pubspec.yaml` file:
 
 ```
-facebook: ^0.0.1
+facebook: ^1.0.0
 ```
 
 Then, ensure Flutter has installed it with `flutter pub get`.
@@ -24,12 +24,6 @@ https://developers.facebook.com/docs/facebook-login/android
 
 ### iOS
 
+Follow the steps in the Facebook SDK guidelines for iOS, starting after those for downloading and installing the SDK itself, which is taken care up by `flutter pub get`, above, and ending before making a change to the AppDelegate (e.g. "Connect Your App Delegate").
 
-
-### Dart
-
-## More information
-
-For more information, see the API documentation.
-
-## Alternatives
+https://developers.facebook.com/docs/facebook-login/ios
