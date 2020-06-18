@@ -103,7 +103,7 @@ public class FacebookPlugin : ActivityAware, ActivityResultListener, FlutterPlug
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Boolean {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         return callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
