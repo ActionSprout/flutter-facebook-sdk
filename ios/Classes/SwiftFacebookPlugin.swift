@@ -169,7 +169,7 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
             params = parameters
         }
 
-        AppEvents.logEvent(AppEvents.Name(name), parameters: params)
+        AppEvents.logEvent(AppEvents.Name(name), parameters: params as [String : Any])
         result(nil)
     }
 }
