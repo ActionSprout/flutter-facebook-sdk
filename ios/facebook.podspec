@@ -23,4 +23,8 @@ Flutter integration to first-party Facebook SDKs.
 
   s.dependency 'FacebookCore'
   s.dependency 'FacebookLogin'
+
+  # Included for some missing symbols from the Swift framework export.
+  s.dependency 'FBSDKCoreKit'
+  s.dependency 'FBSDKLoginKit'
 end
