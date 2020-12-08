@@ -21,10 +21,6 @@ Flutter integration to first-party Facebook SDKs.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
   s.swift_version = '5.0'
 
-  s.dependency 'FacebookCore'
-  s.dependency 'FacebookLogin'
-
-  # Included for some missing symbols from the Swift framework export.
-  s.dependency 'FBSDKCoreKit'
-  s.dependency 'FBSDKLoginKit'
+  s.dependency 'FBSDKCoreKit/Swift'
+  s.dependency 'FBSDKLoginKit/Swift'
 end
