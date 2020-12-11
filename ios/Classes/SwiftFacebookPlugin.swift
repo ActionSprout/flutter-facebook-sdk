@@ -112,12 +112,25 @@ public class SwiftFacebookPlugin: NSObject, FlutterPlugin {
     }
 
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable: Any]) -> Bool {
-        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions as? [UIApplication.LaunchOptionsKey: Any])
+        ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions as? [UIApplication.LaunchOptionsKey: Any]
+        )
+
         return true
     }
 
     public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        return ApplicationDelegate.shared.application(app, open: url, options: options)
+        if #available(iOS 9.0, *) {
+            return ApplicationDelegate.shared.application(
+                app,
+                open: url,
+                sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+                annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+            )
+        } else {
+            return ApplicationDelegate.shared.application(app, open: url, options: options)
+        }
     }
 
     private func loginWithFacebook(_ args: [String: Any?], _ result: @escaping FlutterResult) {
