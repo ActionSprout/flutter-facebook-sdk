@@ -2,6 +2,8 @@ PODS:
   - facebook (0.0.1):
     - FacebookCore
     - FacebookLogin
+    - FBSDKCoreKit
+    - FBSDKLoginKit
     - Flutter
   - FacebookCore (0.9.0):
     - FBSDKCoreKit (~> 5.0)
@@ -39,7 +41,7 @@ EXTERNAL SOURCES:
     :path: Flutter
 
 SPEC CHECKSUMS:
-  facebook: 912354588e88c9eaba16db990915d3bff72248cc
+  facebook: 4e657a12862765184e020dfb6e204f49a361d8ae
   FacebookCore: ba86524b66cfa86d0f8e65d08faa8504a9f732dd
   FacebookLogin: 6cee9fd6e1fe976fe8f7eec199e27b28b14f5d63
   FBSDKCoreKit: 1d5acf7c9d7a2f92bb1a242dc60cae5b7adb91df
@@ -48,4 +50,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0

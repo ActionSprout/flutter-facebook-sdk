@@ -1,5 +1,5 @@
-import FacebookCore
-import FacebookLogin
+import FBSDKCoreKit
+import FBSDKLoginKit
 import Flutter
 import UIKit
 
